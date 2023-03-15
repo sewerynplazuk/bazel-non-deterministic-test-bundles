@@ -1,0 +1,30 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_ios//rules:framework.bzl", "apple_framework")
+load("@build_bazel_rules_ios//rules:library.bzl", "apple_library")
+
+apple_framework(
+    name = "NonDeterministicBundles",
+    srcs = glob([
+        "NonDeterministicBundles/*.swift",
+    ]),
+    platforms = {"ios": "13.0"},
+    visibility = ["//visibility:public"],
+)
+
+library = apple_library(
+    name = "NonDeterministicBundlesTests",
+    srcs = glob([
+        "NonDeterministicBundlesTests/*.swift",
+    ]),
+    deps = [":NonDeterministicBundles"],
+    platforms = {"ios": "13.0"},
+    testonly = True,
+)
+
+ios_unit_test(
+    name = "NonDeterministicBundlesTests",
+    deps = library.lib_names,
+    minimum_os_version = "13.0",
+    tags = ["no-cache"],
+    test_host = None,
+)
